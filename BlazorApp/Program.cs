@@ -59,6 +59,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/access-denied";
     });
 
+builder.Services.AddScoped<SignInManager<IdentityUser>>();
+builder.Services.AddScoped<UserManager<IdentityUser>>();
 builder.Services.AddAuthorization();
 builder.Services.AddSession();
 
