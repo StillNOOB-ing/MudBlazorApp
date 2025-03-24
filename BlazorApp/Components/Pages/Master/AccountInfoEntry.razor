@@ -1,0 +1,40 @@
+﻿@page "/UserLevelRightEntry"
+@inherits AccountInfoEntryBase
+
+<PageTitle>User Account Entry</PageTitle>
+
+<MudDialog>
+	<DialogContent>
+		<EditForm Model="@model" OnValidSubmit="@OnValidSubmit">
+			<DataAnnotationsValidator/>			
+			<MudGrid>
+				<MudItem xs="12" md="12">
+					<MudCardContent>
+						<MudText>Profile</MudText>
+						<MudTextField Label="Name" @bind-Value="model.Name" Variant="Variant.Outlined"></MudTextField>
+						<MudCheckBox Label="Active" @bind-Value="model.Active"></MudCheckBox>
+						<MudSelect Label="User Level Right" T="MUserLevelRight" @bind-Value="@selectedUserLevelRight" Variant="Variant.Outlined" SelectedValuesChanged="@OnSelectedUserLevelRightChanged">
+							@foreach (var item in userLevelRightList)
+							{
+								<MudSelectItem T="MUserLevelRight" Value="@item">@item.Name</MudSelectItem>
+							}
+						</MudSelect>
+					</MudCardContent>
+					<MudCardContent>
+						<MudText>Login</MudText>
+						<MudTextField Label="Username" @bind-Value="model.Username" Variant="Variant.Outlined" For="@(() => model.Username)"></MudTextField>
+						<MudTextField Label="Email" @bind-Value="model.Email" Variant="Variant.Outlined" For="@(() => model.Email)"></MudTextField>
+						<MudTextField Label="Password" @bind-Value="model.Password" Variant="Variant.Outlined" For="@(() => model.Password)"></MudTextField>
+						<MudTextField Label="Confirm Password" @bind-Value="model.ConfirmPassword" Variant="Variant.Outlined" For="@(() => model.ConfirmPassword)"></MudTextField>
+					</MudCardContent>
+					<MudCardActions>
+						<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.DownloadDone">@mode.ToUpper()</MudButton>
+						<div style="width:10px"></div>
+						<MudButton Variant="Variant.Filled" Color="@Color.Error" StartIcon="@Icons.Material.Filled.Cancel" OnClick="@OnCancel">CANCEL</MudButton>
+					</MudCardActions>
+				</MudItem>				
+			</MudGrid>
+			<ValidationSummary/>
+		</EditForm>
+	</DialogContent>
+</MudDialog>

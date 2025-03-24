@@ -1,0 +1,27 @@
+﻿@page "/AccountInfoEntry"
+@inherits UserLevelRightEntryBase
+
+<PageTitle>User Level Right</PageTitle>
+
+<MudDialog>
+	<DialogContent>
+		<EditForm Model="@model" OnValidSubmit="@OnValidSubmit">
+			<DataAnnotationsValidator/>
+			<MudGrid>
+				<MudItem xs="12" md="12">
+					<MudCardContent>
+						<div style="height:5px"></div>
+						<MudTextField Label="Name" @bind-Value="model.Name" Variant="Variant.Outlined"></MudTextField>
+						<MudTextField Label="Description" @bind-Value="model.Description" Variant="Variant.Outlined"></MudTextField>
+					</MudCardContent>
+					<MudCardActions>
+						<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.DownloadDone">@mode.ToUpper()</MudButton>
+						<div style="width:10px"></div>
+						<MudButton Variant="Variant.Filled" Color="@Color.Error" StartIcon="@Icons.Material.Filled.Cancel" OnClick="@OnCancel">CANCEL</MudButton>
+					</MudCardActions>
+				</MudItem>				
+			</MudGrid>
+			<ValidationSummary/>
+		</EditForm>
+	</DialogContent>
+</MudDialog>

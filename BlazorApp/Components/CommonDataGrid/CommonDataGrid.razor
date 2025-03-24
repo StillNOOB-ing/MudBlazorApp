@@ -1,0 +1,90 @@
+﻿@typeparam T
+@inherits CommonDataGridBase<T>
+
+<div style="padding-top:10px; padding-bottom:10px; padding-left:10px; padding-right:10px">
+
+	<MudDataGrid T="T"
+				 @ref="Grid"
+				 Items="@Data"
+				 ReadOnly="@ReadOnly"
+				 ShowColumnOptions="true"
+				 SortMode="SortMode.Multiple"
+				 Hover="@Hover"
+				 Striped="@Stripped"
+				 Bordered="@Bordered"
+				 Dense="@Dense"
+				 Filterable="true"
+				 QuickFilter="@QuickFilter">
+
+		<ToolBarContent>
+
+			<MudText Typo="Typo.h6">@(GridTitle.ToUpper())</MudText>
+
+			<div style="width:25px"></div>
+
+			@foreach (var button in ActionButtons)
+			{
+				<div style="padding-right:5px">
+					@{
+						if (button.Type == ActionButtonType.Add)
+						{
+							<MudButton Variant="@Variant.Filled" Color="@Color.Success" StartIcon="@Icons.Material.Filled.Add" Size="@Size.Medium" OnClick="@(() => OnActionButtonClick.InvokeAsync(new ActionInfo(ActionButtonType.Add)))">ADD</MudButton>
+						}
+						else if (button.Type == ActionButtonType.Edit)
+						{
+							<MudButton Variant="@Variant.Filled" Color="@Color.Warning" StartIcon="@Icons.Material.Filled.Edit" Size="@Size.Medium" OnClick="@(() => OnActionButtonClick.InvokeAsync(new ActionInfo(ActionButtonType.Edit)))">EDIT</MudButton>
+						}
+						else if (button.Type == ActionButtonType.Delete)
+						{
+							<MudButton Variant="@Variant.Filled" Color="@Color.Error" StartIcon="@Icons.Material.Filled.Delete" Size="@Size.Medium" OnClick="@(() => OnActionButtonClick.InvokeAsync(new ActionInfo(ActionButtonType.Delete)))">DELETE</MudButton>
+						}
+						else if (button.Type == ActionButtonType.View)
+						{
+							<MudButton Variant="@Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.Preview" Size="@Size.Medium" OnClick="@(() => OnActionButtonClick.InvokeAsync(new ActionInfo(ActionButtonType.View)))">VIEW</MudButton>
+						}
+					}					
+				</div>
+			}
+
+			<MudSpacer></MudSpacer>
+
+			<MudTextField @bind-Value="@SearchText" Immediate="true" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="@Size.Medium" Class="mt-0"></MudTextField>
+
+		</ToolBarContent>
+
+		<Columns>
+
+			<TemplateColumn Hidden="@(ReadOnly)">
+				<CellTemplate>
+
+					@foreach (var button in CommandButtons)
+					{
+						if (button.Type == CommandButtonType.Add)
+						{
+							<MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Add" Color="@Color.Success" OnClick="@(() => OnCommandButtonClick.InvokeAsync(new CommandInfo<T>(@context.Item, CommandButtonType.Add)))"></MudIconButton>
+						}
+						else if (button.Type == CommandButtonType.Edit)
+						{
+							<MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Edit" Color="@Color.Warning" OnClick="@(() => OnCommandButtonClick.InvokeAsync(new CommandInfo<T>(@context.Item, CommandButtonType.Edit)))"></MudIconButton>
+						}
+						else if (button.Type == CommandButtonType.Delete)
+						{
+							<MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" OnClick="@(() => OnCommandButtonClick.InvokeAsync(new CommandInfo<T>(@context.Item, CommandButtonType.Delete)))"></MudIconButton>
+						}
+						else if (button.Type == CommandButtonType.View)
+						{
+							<MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Preview" Color="@Color.Primary" OnClick="@(() => OnCommandButtonClick.InvokeAsync(new CommandInfo<T>(@context.Item, CommandButtonType.View)))"></MudIconButton>
+						}			
+					}
+					
+				</CellTemplate>
+			</TemplateColumn>
+
+			@RenderColumns()
+
+		</Columns>
+
+	</MudDataGrid>
+
+</div>
+

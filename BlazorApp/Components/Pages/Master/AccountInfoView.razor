@@ -1,0 +1,14 @@
+﻿@page "/AccountInfoView"
+@inherits AccountInfoViewBase
+
+<PageTitle>User Account</PageTitle>
+
+<CommonDataGrid GridTitle="User Account"
+				T="MAccountInfo"
+				Data="@dataList"
+				Columns="@columns"
+				ActionButtons="@actionButtons"
+				CommandButtons="@commandButtons"
+				OnActionButtonClick="@OnActionButtonClicked"
+				OnCommandButtonClick="@OnCommandButtonClicked">
+</CommonDataGrid>

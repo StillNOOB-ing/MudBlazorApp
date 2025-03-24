@@ -1,0 +1,35 @@
+﻿@typeparam T
+@inject IDialogService DialogService
+
+<MudDialog>
+	<DialogContent>
+		<MudGrid>
+			<MudItem xs="12" md="12">
+				<MudPaper Class="pa-4">
+					<MudForm>
+						<MudTextField T="string" Label="Text"></MudTextField>
+						<MudDatePicker Label="Date"></MudDatePicker>
+					</MudForm>
+				</MudPaper>
+			</MudItem>
+		</MudGrid>
+	</DialogContent>
+	<DialogActions>
+		<MudButton Color="Color.Primary" OnClick="OnBtnSaveClick">Save</MudButton>
+		<MudButton Color="Color.Secondary" OnClick="OnBtnCancelClick">Cancel</MudButton>
+	</DialogActions>
+</MudDialog>
+
+@code {
+	[Parameter] public T Item { get; set; }
+
+	public void OnBtnSaveClick()
+	{
+
+	}
+
+	public void OnBtnCancelClick()
+	{
+		//DialogService.Close();
+	}
+}

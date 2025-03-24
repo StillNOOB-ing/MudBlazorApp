@@ -1,0 +1,14 @@
+﻿@page "/UserLevelRightView"
+@inherits UserLevelRightViewBase
+
+<PageTitle>User Level Right</PageTitle>
+
+<CommonDataGrid GridTitle="User Level Right"
+				T="MUserLevelRight"
+				Data="@dataList"
+				Columns="@columns"
+				ActionButtons="@actionButtons"
+				CommandButtons="@commandButtons"
+				OnActionButtonClick="@OnActionButtonClicked"
+				OnCommandButtonClick="@OnCommandButtonClicked">
+</CommonDataGrid>
