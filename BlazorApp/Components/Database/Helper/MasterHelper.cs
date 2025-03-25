@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using MudBlazorApp.Components.Services;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using static MudBlazor.CategoryTypes;
@@ -23,7 +22,6 @@ namespace MudBlazorApp.Components.Database.Helper
             PasswordHasher = passwordHasher;
         }
 
-
         #region AccountInfo
 
         public IQueryable<MAccountInfo> GetAccountInfoDB()
@@ -39,7 +37,7 @@ namespace MudBlazorApp.Components.Database.Helper
             item.Password = PasswordHasher.HashPassword(item, item.Password);
 
             item.CreatedOn = DateTime.Now;
-            item.CreatedBy = AccountService.GetUsername();
+            item.CreatedBy = "";
 
             return await repository.InsertAccountInfo(item);
         }
@@ -48,7 +46,7 @@ namespace MudBlazorApp.Components.Database.Helper
             item.Password = PasswordHasher.HashPassword(item, item.Password);
 
             item.UpdatedOn = DateTime.Now;
-            item.UpdatedBy = AccountService.GetUsername();
+            item.UpdatedBy = "";
 
             return await repository.UpdateAccountInfo(item);
         }
@@ -72,14 +70,14 @@ namespace MudBlazorApp.Components.Database.Helper
         public async Task<ResultInfo> InsertUserLevelRight(MUserLevelRight item)
         {           
             item.CreatedOn = DateTime.Now;
-            item.CreatedBy = AccountService.GetUsername();
+            item.CreatedBy = "";
 
             return await repository.InsertUserLevelRight(item);
         }
         public async Task<ResultInfo> UpdateUserLevelRight(MUserLevelRight item)
         {
             item.UpdatedOn = DateTime.Now;
-            item.UpdatedBy = AccountService.GetUsername();
+            item.UpdatedBy = "";
 
             return await repository.UpdateUserLevelRight(item);
         }

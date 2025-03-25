@@ -1,36 +1,30 @@
 ﻿@page "/Login"
 @inherits LoginBase
-@inject NavigationManager Navigation
-@inject SignInManager<IdentityUser> SignInManager
-@inject AuthenticationStateProvider AuthStateProvider
-@inject ISnackbar Snackbar
 
 <PageTitle>Login</PageTitle>
 
-<MudPaper Class="pa-5 mx-auto" Style="max-width: 400px;">
-
+<MudPaper Class="pa-5 mx-auto" Style="max-width:400px">
+		
 	<MudText Typo="Typo.h5" Class="mb-4">Login</MudText>
-	
-	<div>
-		<EditForm Model="@loginModel" OnValidSubmit="OnValidSubmit">
-			<DataAnnotationsValidator/>
-			<MudGrid>
-				<MudItem xs="12" md="12">
-					<MudCardContent>
-						<MudTextField Label="Email" @bind-Value="loginModel.Email" Required="true" RequiredError="Email is required." />
-						<MudTextField Label="Password" @bind-Value="loginModel.Password" Required="true" RequiredError="Password is required." Type="password" />
-						<MudCheckBox Label="Remember Me" @bind-Value="loginModel.RememberMe" />
-					</MudCardContent>
-					<MudCardActions>
-						<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" FullWidth="true">
-							Login
-						</MudButton>
-					</MudCardActions>
-				</MudItem>
-			</MudGrid>
-			<ValidationSummary/>
-		</EditForm>
-	</div>
+
+	<EditForm Model="@loginModel" OnValidSubmit="OnValidSubmit">
+		<DataAnnotationsValidator />
+		<MudGrid>
+			<MudItem xs="12" md="12">
+				<MudCardContent>
+					<MudTextField Label="Email" @bind-Value="loginModel.Email" Required="true" RequiredError="Email is required." />
+					<MudTextField Label="Password" @bind-Value="loginModel.Password" Required="true" RequiredError="Password is required." Type="password" />
+					<MudCheckBox Label="Remember Me" @bind-Value="loginModel.RememberMe" />
+				</MudCardContent>
+				<MudCardActions>
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" FullWidth="true">
+						Login
+					</MudButton>
+				</MudCardActions>
+			</MudItem>
+		</MudGrid>
+		<ValidationSummary />
+	</EditForm>
 
 	@if (!string.IsNullOrEmpty(errorMessage))
 	{

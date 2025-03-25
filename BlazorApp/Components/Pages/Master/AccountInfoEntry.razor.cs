@@ -5,6 +5,7 @@ using MudBlazor;
 using MudBlazorApp.Components.CommonDataGrid;
 using MudBlazorApp.Components.Database.Interface;
 using MudBlazorApp.Components.Database.Model;
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -17,18 +18,35 @@ namespace MudBlazorApp.Components.Pages.Master
         [Inject] IMasterHelper masterHelper { get; set; }
 
         [CascadingParameter] private IMudDialogInstance MudDialog { get; set; }
-        [Parameter] public MAccountInfo model { get; set; }
-        [Parameter] public string mode { get; set; }
+        [Parameter] public MAccountInfo model { get; set; } = new MAccountInfo();
+        [Parameter] public string mode { get; set; } = string.Empty;
 
-        public List<MUserLevelRight> userLevelRightList { get; set; }
-        public MUserLevelRight selectedUserLevelRight {  get; set; }
+        public List<MUserLevelRight> levelRightList { get; set; } = new List<MUserLevelRight>();
+
+        public MUserLevelRight selectedLevelRight {  get; set; } = new MUserLevelRight();
 
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            userLevelRightList = new List<MUserLevelRight>();
-            userLevelRightList = await masterHelper.GetUserLevelRightAll();
+            levelRightList = masterHelper.GetUserLevelRightDB().ToList();
+
+            if (model != null)
+            {
+                if (levelRightList != null)
+                {
+                    selectedLevelRight = levelRightList.Where(x => x.UID == model.LevelRightID).FirstOrDefault();
+                }  
+
+                if (mode == "edit")
+                {
+                    model.ConfirmPassword = model.Password;
+                }
+                if (mode == "password")
+                {
+                    model.Password = string.Empty;
+                }
+            }
         }
 
         protected async Task OnValidSubmit(EditContext context)
@@ -60,6 +78,15 @@ namespace MudBlazorApp.Components.Pages.Master
                     MudDialog.Close();
                 }
             }
+            else if (mode == "password")
+            {
+                var result = await masterHelper.UpdateAccountInfo(model);
+                if (result.success)
+                {
+                    snackBar.Add("Change Password Successfully", Severity.Success);
+                    MudDialog.Close();
+                }
+            }
         }
 
         protected void OnCancel()
@@ -71,10 +98,10 @@ namespace MudBlazorApp.Components.Pages.Master
 
         public void OnSelectedUserLevelRightChanged()
         {
-            if (selectedUserLevelRight != null)
+            if (selectedLevelRight != null)
             {
-                model.LevelRightID = selectedUserLevelRight.UID;
-                model.LevelRightName = selectedUserLevelRight.Name;
+                model.LevelRightID = selectedLevelRight.UID;
+                model.LevelRightName = selectedLevelRight.Name;
             }
             else
             {
@@ -82,6 +109,7 @@ namespace MudBlazorApp.Components.Pages.Master
                 model.LevelRightName = null;
             }
         }
+
         #endregion
     }
 }

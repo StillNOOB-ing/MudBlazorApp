@@ -14,8 +14,9 @@ using Microsoft.AspNetCore.Identity.UI;
 using MudBlazor;
 using MudBlazor.Services;
 using System;
-using MudBlazorApp.Components.Services;
 using MudBlazorApp.Components.Database.Repository;
+using Blazored.LocalStorage;
+using Blazored.SessionStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,27 +47,8 @@ builder.Services.AddScoped<IDialogServieHelper, DialogServiceHelper>();
 
 builder.Services.AddScoped<IPasswordHasher<MAccountInfo>, PasswordHasher<MAccountInfo>>();
 
-var httpContextAccessor = new HttpContextAccessor();
-builder.Services.AddSingleton<IHttpContextAccessor>(httpContextAccessor);
-AccountService.Initialize(httpContextAccessor);
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;
-})
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/Login";
-        options.AccessDeniedPath = "/access-denied";
-    });
-
-builder.Services.AddScoped<SignInManager<IdentityUser>>();
-builder.Services.AddScoped<UserManager<IdentityUser>>();
-builder.Services.AddAuthorization();
-builder.Services.AddSession();
+builder.Services.AddBlazoredSessionStorage();
+builder.Services.AddBlazoredLocalStorage();
 
 var app = builder.Build();
 
@@ -79,11 +61,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseSession();
 
 app.UseAntiforgery();
 

@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject ProtectedSessionStorage sessionStorage
+@inject NavigationManager navigationManager
 
 <MudThemeProvider />
 <MudPopoverProvider />
@@ -7,8 +9,21 @@
 
 <MudLayout>
     <MudAppBar>
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@OnDrawerToggle" />
+
+        @if (!string.IsNullOrEmpty(username))
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@OnDrawerToggle" />
+        }
+
         My Application
+
+        <MudSpacer></MudSpacer>
+
+        @if (!string.IsNullOrEmpty(username))
+        {
+            <MudButton OnClick="@Logout" Variant="@Variant.Filled" Color="@Color.Tertiary">Logout</MudButton>
+        }
+        
     </MudAppBar>
     <MudDrawer @bind-Open="@isDrawerOpened">
         <MudNavMenu>
@@ -35,10 +50,37 @@
 </div>
 
 @code {
-    public bool isDrawerOpened { get; set; } = true;
+    public bool isDrawerOpened { get; set; } = true;    
 
     public void OnDrawerToggle()
     {
         isDrawerOpened = !isDrawerOpened;
+    }
+
+    private string username = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var sessionData = await sessionStorage.GetAsync<string>("username");
+
+        if (sessionData.Success && !string.IsNullOrEmpty(sessionData.Value))
+        {
+            username = sessionData.Value;
+        }
+
+        if (string.IsNullOrEmpty(username))
+        {
+            isDrawerOpened = false;
+        }
+
+        await InvokeAsync(() => StateHasChanged());
+    }   
+
+    private async Task Logout()
+    {
+        await sessionStorage.DeleteAsync("username");
+        navigationManager.NavigateTo("/Login", forceLoad: true);
     }
 }

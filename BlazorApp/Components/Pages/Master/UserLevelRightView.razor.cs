@@ -21,10 +21,10 @@ namespace MudBlazorApp.Components.Pages.Master
             new StandardColumn("UID", (Expression<Func<MUserLevelRight, int>>)(x => x.UID)),
             new StandardColumn("Name", (Expression<Func<MUserLevelRight, string?>>)(x => x.Name)),
             new StandardColumn("Description", (Expression<Func<MUserLevelRight, string?>>)(x => x.Description)),
-            new StandardColumn("CreatedOn", (Expression<Func<MUserLevelRight, DateTime?>>)(x => x.CreatedOn)),
-            new StandardColumn("CreatedBy", (Expression<Func<MUserLevelRight, string?>>)(x => x.CreatedBy)),
-            new StandardColumn("UpdatedOn", (Expression<Func<MUserLevelRight, DateTime?>>)(x => x.UpdatedOn)),
-            new StandardColumn("CreatedBy", (Expression<Func<MUserLevelRight, string?>>)(x => x.UpdatedBy)),
+            new StandardColumn("Created On", (Expression<Func<MUserLevelRight, DateTime?>>)(x => x.CreatedOn)),
+            new StandardColumn("Created By", (Expression<Func<MUserLevelRight, string?>>)(x => x.CreatedBy)),
+            new StandardColumn("Updated On", (Expression<Func<MUserLevelRight, DateTime?>>)(x => x.UpdatedOn)),
+            new StandardColumn("Updated By", (Expression<Func<MUserLevelRight, string?>>)(x => x.UpdatedBy)),
         };
 
         public List<StandardActionButton> actionButtons { get; set; } = new List<StandardActionButton>()

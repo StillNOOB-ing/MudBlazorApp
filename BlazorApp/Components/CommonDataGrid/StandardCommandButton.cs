@@ -2,7 +2,7 @@
 {
     public enum CommandButtonType
     {
-        Add, Edit, Delete, View
+        Add, Edit, Delete, View, ChangePassword
     }
 
     public class CommandInfo<T>
@@ -40,6 +40,11 @@
         public static StandardCommandButton ViewButton()
         {
             return new StandardCommandButton(CommandButtonType.View);
+        }
+
+        public static StandardCommandButton ChangePasswordButton()
+        {
+            return new StandardCommandButton(CommandButtonType.ChangePassword);
         }
     }
 }

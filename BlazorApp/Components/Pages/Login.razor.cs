@@ -10,14 +10,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.AspNetCore.Components.Forms;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace MudBlazorApp.Components.Pages
 {    
     public class LoginBase: ComponentBase
     {
-        [Inject] SignInManager<IdentityUser> SignInManager { get; set; }
-        [Inject] NavigationManager navigationManager { get;set; }
+        [Inject] IMasterHelper masterHelper { get; set; }
+        [Inject] IPasswordHasher<MAccountInfo> passwordHasher { get; set; }
         [Inject] ISnackbar snackBar { get; set; }
+        [Inject] ProtectedSessionStorage sessionStorage { get; set; }
+
+        [Inject] NavigationManager navigationManager { get;set; }
 
         public LoginModel loginModel { get; set; }
         public string errorMessage { get; set; }
@@ -27,21 +31,48 @@ namespace MudBlazorApp.Components.Pages
             await base.OnInitializedAsync();
 
             loginModel = new LoginModel();
+
+            var sessionUser = await sessionStorage.GetAsync<string>("username");
+
+            if (sessionUser.Success && !string.IsNullOrEmpty(sessionUser.Value))
+            {
+                navigationManager.NavigateTo("/", forceLoad: true);
+            }
         }
 
         public async Task OnValidSubmit(EditContext context)
         {
-            var result = await SignInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: false);
+            var accountList = await masterHelper.GetAccountInfoAll();
 
-            if (result.Succeeded)
+            var user = accountList.Where(x => x.Email == loginModel.Email).FirstOrDefault();
+
+            if (user == null)
             {
-                snackBar.Add("Login successful!", Severity.Success);
-                navigationManager.NavigateTo("/", forceLoad: true);
+                errorMessage = "User not found.";
+                return;
             }
-            else
+            if (!user.Active)
+            {
+                errorMessage = "User has been deactivated.";
+                return;
+            }
+
+            var passwordVerificationResult = passwordHasher.VerifyHashedPassword(user, user.Password, loginModel.Password);
+
+            if (passwordVerificationResult == PasswordVerificationResult.Failed)
             {
                 errorMessage = "Invalid email or password.";
+                return;
             }
+
+            snackBar.Add("Login successful!", Severity.Success);
+
+            //user.LastLoginOn = DateTime.Now;
+            //var result = await masterHelper.UpdateAccountInfo(user);
+
+            await sessionStorage.SetAsync("username", user.Name);
+
+            navigationManager.NavigateTo("/", forceLoad: true);
         }
 
         public class LoginModel

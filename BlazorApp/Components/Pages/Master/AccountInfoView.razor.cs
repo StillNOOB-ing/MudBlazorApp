@@ -22,10 +22,10 @@ namespace MudBlazorApp.Components.Pages.Master
             new StandardColumn("Name", (Expression<Func<MAccountInfo, string?>>)(x => x.Name)),
             new StandardColumn("Active", (Expression<Func<MAccountInfo, bool>>)(x => x.Active)),
             new StandardColumn("Level Right", (Expression<Func<MAccountInfo, string?>>)(x => x.LevelRightName)),
-            new StandardColumn("CreatedOn", (Expression<Func<MAccountInfo, DateTime?>>)(x => x.CreatedOn)),
-            new StandardColumn("CreatedBy", (Expression<Func<MAccountInfo, string?>>)(x => x.CreatedBy)),
-            new StandardColumn("UpdatedOn", (Expression<Func<MAccountInfo, DateTime?>>)(x => x.UpdatedOn)),
-            new StandardColumn("CreatedBy", (Expression<Func<MAccountInfo, string?>>)(x => x.UpdatedBy)),
+            new StandardColumn("Created On", (Expression<Func<MAccountInfo, DateTime?>>)(x => x.CreatedOn)),
+            new StandardColumn("Created By", (Expression<Func<MAccountInfo, string?>>)(x => x.CreatedBy)),
+            new StandardColumn("Updated On", (Expression<Func<MAccountInfo, DateTime?>>)(x => x.UpdatedOn)),
+            new StandardColumn("Updated By", (Expression<Func<MAccountInfo, string?>>)(x => x.UpdatedBy)),
         };
 
         public List<StandardActionButton> actionButtons { get; set; } = new List<StandardActionButton>()
@@ -37,6 +37,7 @@ namespace MudBlazorApp.Components.Pages.Master
         {
             StandardCommandButton.EditButton(),
             StandardCommandButton.DeleteButton(),
+            StandardCommandButton.ChangePasswordButton(),
         };
 
         protected override async Task OnInitializedAsync()
@@ -98,6 +99,21 @@ namespace MudBlazorApp.Components.Pages.Master
                 };
                 var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = true };
                 var dialog = await dialogueService.ShowAsync<AccountInfoEntry>("Delete", parameters, options);
+                var result = await dialog.Result;
+                if (!result.Canceled)
+                {
+                    await ReloadGrid();
+                }
+            }
+            else if (info.ButtonType == CommandButtonType.ChangePassword)
+            {
+                var parameters = new DialogParameters
+                {
+                    { "model", info.Item },
+                    { "mode", "password" }
+                };
+                var options = new DialogOptions { CloseOnEscapeKey = true, FullWidth = true };
+                var dialog = await dialogueService.ShowAsync<AccountInfoEntry>("Change Password", parameters, options);
                 var result = await dialog.Result;
                 if (!result.Canceled)
                 {

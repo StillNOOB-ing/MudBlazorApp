@@ -74,7 +74,11 @@
 						else if (button.Type == CommandButtonType.View)
 						{
 							<MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Preview" Color="@Color.Primary" OnClick="@(() => OnCommandButtonClick.InvokeAsync(new CommandInfo<T>(@context.Item, CommandButtonType.View)))"></MudIconButton>
-						}			
+						}
+						else if (button.Type == CommandButtonType.ChangePassword)
+						{
+							<MudIconButton Size="@Size.Small" Icon="@Icons.Material.Filled.Password" Color="@Color.Default" OnClick="@(() => OnCommandButtonClick.InvokeAsync(new CommandInfo<T>(@context.Item, CommandButtonType.ChangePassword)))"></MudIconButton>
+						}
 					}
 					
 				</CellTemplate>
