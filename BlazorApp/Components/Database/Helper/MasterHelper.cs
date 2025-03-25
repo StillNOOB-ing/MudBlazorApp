@@ -5,105 +5,56 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using MudBlazorApp.Components.Services;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using static MudBlazor.CategoryTypes;
 
 
 namespace MudBlazorApp.Components.Database.Helper
 {
     public class MasterHelper: IMasterHelper
-    {
-        private readonly ApplicationDbContext DbContext;
+    {      
+        private readonly IMasterRepository repository;
         private readonly IPasswordHasher<MAccountInfo> PasswordHasher;
-        
-        public MasterHelper(ApplicationDbContext db, IPasswordHasher<MAccountInfo> passwordHasher)
+
+        public MasterHelper(IMasterRepository masterRepository, IPasswordHasher<MAccountInfo> passwordHasher)
         {
-            DbContext = db;
+            repository = masterRepository;
             PasswordHasher = passwordHasher;
         }
+
 
         #region AccountInfo
 
         public IQueryable<MAccountInfo> GetAccountInfoDB()
         {
-            return DbContext.AccountInfos.AsNoTracking().AsQueryable();
+            return repository.GetAccountInfoDB(x => true);
         }
         public async Task<List<MAccountInfo>> GetAccountInfoAll()
         {
-            return await DbContext.AccountInfos.AsNoTracking().ToListAsync();
+            return await repository.GetAccountInfoAll(x => true);
         }
         public async Task<ResultInfo> InsertAccountInfo(MAccountInfo item)
         {
-            try
-            {
-                var findItem = new MAccountInfo();
-                findItem = item.Clone();
+            item.Password = PasswordHasher.HashPassword(item, item.Password);
 
-                findItem.Password = PasswordHasher.HashPassword(findItem, item.Password);
+            item.CreatedOn = DateTime.Now;
+            item.CreatedBy = AccountService.GetUsername();
 
-                findItem.CreatedOn = DateTime.Now;
-                findItem.CreatedBy = AccountService.GetUsername();
-
-                await DbContext.AccountInfos.AddAsync(findItem);
-                await DbContext.SaveChangesAsync();
-
-                return new ResultInfo(true);
-            }
-            catch (Exception ex)
-            {
-                return new ResultInfo(false, ex.Message);
-            }
+            return await repository.InsertAccountInfo(item);
         }
         public async Task<ResultInfo> UpdateAccountInfo(MAccountInfo item)
         {
-            try
-            {
-                var findItem = new MAccountInfo();
-                findItem = GetAccountInfoDB().Where(x => x.UID == item.UID).FirstOrDefault();
-                if (findItem != null)
-                {
-                    findItem = item.Clone();
+            item.Password = PasswordHasher.HashPassword(item, item.Password);
 
-                    findItem.Password = PasswordHasher.HashPassword(findItem, item.Password);
+            item.UpdatedOn = DateTime.Now;
+            item.UpdatedBy = AccountService.GetUsername();
 
-                    item.UpdatedOn = DateTime.Now;
-                    item.UpdatedBy = AccountService.GetUsername();
-
-                    DbContext.AccountInfos.Update(findItem);
-                    await DbContext.SaveChangesAsync();
-
-                    return new ResultInfo(true);
-                }
-                else
-                {
-                    return new ResultInfo(false, "No item found!");
-                }
-            }
-            catch (Exception ex)
-            {
-                return new ResultInfo(false, ex.Message);
-            }
+            return await repository.UpdateAccountInfo(item);
         }
         public async Task<ResultInfo> DeleteAccountInfo(MAccountInfo item)
         {
-            try
-            {
-                var findItem = new MAccountInfo();
-                findItem = GetAccountInfoDB().Where(x => x.UID == item.UID).FirstOrDefault();
-                if (findItem != null)
-                {
-                    DbContext.AccountInfos.Remove(findItem);
-                    await DbContext.SaveChangesAsync();
-
-                    return new ResultInfo(true);
-                }
-                else
-                {
-                    return new ResultInfo(false, "No item found!");
-                }
-            }
-            catch (Exception ex)
-            {
-                return new ResultInfo(false, ex.Message);
-            }
+            return await repository.DeleteAccountInfo(item);
         }
 
         #endregion
@@ -112,82 +63,29 @@ namespace MudBlazorApp.Components.Database.Helper
 
         public IQueryable<MUserLevelRight> GetUserLevelRightDB()
         {
-            return DbContext.UserLevelRights.AsNoTracking().AsQueryable();
+            return repository.GetUserLevelRightDB(x => true);
         }
         public async Task<List<MUserLevelRight>> GetUserLevelRightAll()
         {
-            return await DbContext.UserLevelRights.AsNoTracking().ToListAsync();
+            return await repository.GetUserLevelRightAll(x => true);
         }
         public async Task<ResultInfo> InsertUserLevelRight(MUserLevelRight item)
-        {
-            try
-            {
-                var findItem = new MUserLevelRight();
-                findItem = item.Clone();
+        {           
+            item.CreatedOn = DateTime.Now;
+            item.CreatedBy = AccountService.GetUsername();
 
-                findItem.CreatedOn = DateTime.Now;
-                findItem.CreatedBy = AccountService.GetUsername();
-
-                await DbContext.UserLevelRights.AddAsync(findItem);
-                await DbContext.SaveChangesAsync();
-
-                return new ResultInfo(true);
-            }
-            catch (Exception ex)
-            {
-                return new ResultInfo(false, ex.Message);
-            }
+            return await repository.InsertUserLevelRight(item);
         }
         public async Task<ResultInfo> UpdateUserLevelRight(MUserLevelRight item)
         {
-            try
-            {
-                var findItem = new MUserLevelRight();
-                findItem = GetUserLevelRightDB().Where(x => x.UID == item.UID).FirstOrDefault();
-                if (findItem != null)
-                {
-                    findItem = item.Clone();
+            item.UpdatedOn = DateTime.Now;
+            item.UpdatedBy = AccountService.GetUsername();
 
-                    item.UpdatedOn = DateTime.Now;
-                    item.UpdatedBy = AccountService.GetUsername();
-
-                    DbContext.UserLevelRights.Update(findItem);
-                    await DbContext.SaveChangesAsync();
-
-                    return new ResultInfo(true);
-                }
-                else
-                {
-                    return new ResultInfo(false, "No item found!");
-                }                    
-            }
-            catch (Exception ex)
-            {
-                return new ResultInfo(false, ex.Message);
-            }
+            return await repository.UpdateUserLevelRight(item);
         }
         public async Task<ResultInfo> DeleteUserLevelRight(MUserLevelRight item)
         {
-            try
-            {
-                var findItem = new MUserLevelRight();
-                findItem = GetUserLevelRightDB().Where(x => x.UID == item.UID).FirstOrDefault();
-                if (findItem != null)
-                {
-                    DbContext.UserLevelRights.Remove(findItem);
-                    await DbContext.SaveChangesAsync();
-
-                    return new ResultInfo(true);
-                }
-                else
-                {
-                    return new ResultInfo(false, "No item found!");
-                }
-            }
-            catch (Exception ex)
-            {
-                return new ResultInfo(false, ex.Message);
-            }
+            return await repository.DeleteUserLevelRight(item);
         }
 
         #endregion

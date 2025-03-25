@@ -9,5 +9,15 @@ namespace MudBlazorApp.Components.Database
 
         public DbSet<MAccountInfo> AccountInfos { get; set; }
         public DbSet<MUserLevelRight> UserLevelRights { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // for view table
+            //modelBuilder.Entity<MAccountInfo>(entity =>
+            //{
+            //    entity.HasNoKey();
+            //    entity.ToView("MAccountInfo");
+            //});
+        }
     }
 }

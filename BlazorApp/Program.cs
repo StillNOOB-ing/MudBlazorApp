@@ -15,6 +15,7 @@ using MudBlazor;
 using MudBlazor.Services;
 using System;
 using MudBlazorApp.Components.Services;
+using MudBlazorApp.Components.Database.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,9 +35,12 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
 });
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer("Server=DESKTOP-CVJJ8VV;Database=MudBlazorApp;Trusted_Connection=True;TrustServerCertificate=True"));
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
+builder.Services.AddScoped<IMasterRepository, MasterRepository>();
 builder.Services.AddScoped<IMasterHelper, MasterHelper>();
 builder.Services.AddScoped<IDialogServieHelper, DialogServiceHelper>();
 
