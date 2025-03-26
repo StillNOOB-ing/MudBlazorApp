@@ -38,6 +38,9 @@
                             </MudSelect>
                             <MudTextField Label="Completed On" @bind-Value="model.CompletedOn" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
 
+
+                            <MudTextField Label="Color" @bind-Value="model.color" Variant="Variant.Outlined"></MudTextField>
+
                             <MudCardActions>
                                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.DownloadDone">@mode.ToUpper()</MudButton>
                                 <div style="width:10px"></div>

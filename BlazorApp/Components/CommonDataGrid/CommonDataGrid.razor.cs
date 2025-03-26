@@ -18,6 +18,9 @@ namespace MudBlazorApp.Components.CommonDataGrid
         [Parameter] public List<StandardCommandButton> CommandButtons { get; set; } = new List<StandardCommandButton>();
         [Parameter] public EventCallback<ActionInfo> OnActionButtonClick {  get; set; }
         [Parameter] public EventCallback<CommandInfo<T>> OnCommandButtonClick { get; set; }
+        [Parameter] public EventCallback<int> OnPageChanged { get; set; }
+        [Parameter] public int PageCount { get; set; }
+        [Parameter] public int PageSize { get; set; } = 10;
         [Parameter] public bool ReadOnly { get; set; } = false;
         [Parameter] public bool Hover { get; set; } = true;
         [Parameter] public bool Stripped { get; set; } = false;
@@ -42,6 +45,8 @@ namespace MudBlazorApp.Components.CommonDataGrid
             //        }
             //    }
             //}
+
+            await InvokeAsync(() => StateHasChanged());
         }
 
         public RenderFragment RenderColumns() => builder =>
@@ -64,11 +69,16 @@ namespace MudBlazorApp.Components.CommonDataGrid
                 return true;
             }
 
+            var properties = typeof(T).GetProperties();
 
-            //if (str.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
-            //{
-            //    return true;
-            //}
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(x)?.ToString();
+                if (!string.IsNullOrEmpty(value) && value.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
 
             return false;
         };

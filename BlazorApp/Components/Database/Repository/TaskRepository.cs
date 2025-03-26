@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
+using Microsoft.Data.SqlClient;
 
 
 namespace MudBlazorApp.Components.Database.Repository

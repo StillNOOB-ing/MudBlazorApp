@@ -18,5 +18,6 @@ namespace MudBlazorApp.Components.Database.Model
         public int? TypeID { get; set; }
         public string? TypeName { get; set; }
         public DateTime? CompletedOn { get; set; }
+        [NotMapped] public string? color { get; set; }
     }
 }

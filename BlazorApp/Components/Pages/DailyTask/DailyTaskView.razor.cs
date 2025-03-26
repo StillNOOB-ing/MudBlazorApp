@@ -16,6 +16,9 @@ namespace MudBlazorApp.Components.Pages.DailyTask
         [Inject] ITaskHelper taskHelper { get; set; }
         [Inject] IMasterHelper masterHelper { get; set; }
         public List<TDailyTask> dataList { get; set; }
+        public int pageCount { get; set; }  
+        public int pageIndex { get; set; }
+        public int pageSize { get; set; } = 5;
 
         public List<StandardColumn> columns { get; set; } = new List<StandardColumn>()
         {
@@ -33,6 +36,7 @@ namespace MudBlazorApp.Components.Pages.DailyTask
             new StandardColumn("Created By", (Expression<Func<TDailyTask, string?>>)(x => x.CreatedBy)),
             new StandardColumn("Updated On", (Expression<Func<TDailyTask, DateTime?>>)(x => x.UpdatedOn)),
             new StandardColumn("Updated By", (Expression<Func<TDailyTask, string?>>)(x => x.UpdatedBy)),
+            new StandardColumn("Color", (Expression<Func<TDailyTask, string?>>)(x => x.color)),
         };
 
         public List<StandardActionButton> actionButtons { get; set; } = new List<StandardActionButton>()
@@ -51,12 +55,15 @@ namespace MudBlazorApp.Components.Pages.DailyTask
         {
             await base.OnInitializedAsync();
 
-            dataList = await taskHelper.GetDailyTaskAll();
+            var total = (await taskHelper.GetDailyTaskAll()).Count();
+            pageCount = (total / pageSize) + (total % pageSize > 0 ? 1 : 0);
+
+            dataList = await taskHelper.GetDailyTaskByPage(pageIndex, pageSize, Microsoft.Data.SqlClient.SortOrder.Ascending);
         }
 
         protected async Task ReloadGrid()
         {
-            dataList = await taskHelper.GetDailyTaskAll();
+            dataList = await taskHelper.GetDailyTaskByPage(pageIndex, pageSize, Microsoft.Data.SqlClient.SortOrder.Ascending);
 
             StateHasChanged();
         }
@@ -127,6 +134,13 @@ namespace MudBlazorApp.Components.Pages.DailyTask
                     await ReloadGrid();
                 }
             }
+        }
+
+        protected async Task OnPageChanged(int index)
+        {
+            pageIndex = index;
+
+            await ReloadGrid();
         }
     }
 }
