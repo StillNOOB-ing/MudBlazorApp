@@ -23,18 +23,21 @@
         {
             <MudButton OnClick="@Logout" Variant="@Variant.Filled" Color="@Color.Tertiary">Logout</MudButton>
         }
-        
+
     </MudAppBar>
     <MudDrawer @bind-Open="@isDrawerOpened">
         <MudNavMenu>
             <MudText Typo="Typo.h6" Class="px-4">My Application</MudText>
             <MudDivider Class="my-2"></MudDivider>
             <MudNavLink Href="/">Home</MudNavLink>
+            <MudNavGroup Title="Daily Task" Expanded="true">
+                <MudNavLink Href="/DailyTask">My Daily Task</MudNavLink>
+            </MudNavGroup>
             <MudNavGroup Title="Master" Expanded="true">
                 <MudNavLink Href="/AccountInfoView">User Account</MudNavLink>
                 <MudNavLink Href="/UserLevelRightView">User Level Right</MudNavLink>
-            </MudNavGroup>
-            <MudNavGroup Title="My Profile" Expanded="true">
+                <MudNavLink Href="/StatusView">Status</MudNavLink>
+                <MudNavLink Href="/TypeView">Type</MudNavLink>
             </MudNavGroup>
         </MudNavMenu>
     </MudDrawer>
@@ -67,7 +70,18 @@
 
         if (sessionData.Success && !string.IsNullOrEmpty(sessionData.Value))
         {
+            await sessionStorage.SetAsync("loggingIn", "false");
             username = sessionData.Value;
+        }
+        else
+        {
+            var isLoggingIn = await sessionStorage.GetAsync<string>("loggingIn");
+
+            if (!isLoggingIn.Success || isLoggingIn.Value != "true")
+            {
+                await sessionStorage.SetAsync("loggingIn", "true");
+                await Logout();
+            }           
         }
 
         if (string.IsNullOrEmpty(username))

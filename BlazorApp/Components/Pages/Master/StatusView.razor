@@ -1,0 +1,14 @@
+﻿@page "/StatusView"
+@inherits StatusViewBase
+
+<PageTitle>Status</PageTitle>
+
+<CommonDataGrid GridTitle="Status"
+				T="MStatus"
+				Data="@dataList"
+				Columns="@columns"
+				ActionButtons="@actionButtons"
+				CommandButtons="@commandButtons"
+				OnActionButtonClick="@OnActionButtonClicked"
+				OnCommandButtonClick="@OnCommandButtonClicked">
+</CommonDataGrid>

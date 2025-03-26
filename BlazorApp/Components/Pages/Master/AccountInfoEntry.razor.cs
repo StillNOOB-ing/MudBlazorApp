@@ -38,7 +38,7 @@ namespace MudBlazorApp.Components.Pages.Master
                     selectedLevelRight = levelRightList.Where(x => x.UID == model.LevelRightID).FirstOrDefault();
                 }  
 
-                if (mode == "edit")
+                if (mode == "edit" || mode == "delete")
                 {
                     model.ConfirmPassword = model.Password;
                 }

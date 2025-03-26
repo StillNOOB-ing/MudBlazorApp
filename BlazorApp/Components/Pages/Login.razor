@@ -14,7 +14,7 @@
 				<MudCardContent>
 					<MudTextField Label="Email" @bind-Value="loginModel.Email" Required="true" RequiredError="Email is required." />
 					<MudTextField Label="Password" @bind-Value="loginModel.Password" Required="true" RequiredError="Password is required." Type="password" />
-					<MudCheckBox Label="Remember Me" @bind-Value="loginModel.RememberMe" />
+					@* <MudCheckBox Label="Remember Me" @bind-Value="loginModel.RememberMe" /> *@
 				</MudCardContent>
 				<MudCardActions>
 					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" FullWidth="true">

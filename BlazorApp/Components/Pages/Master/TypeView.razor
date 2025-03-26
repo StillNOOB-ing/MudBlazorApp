@@ -1,0 +1,14 @@
+﻿@page "/TypeView"
+@inherits TypeViewBase
+
+<PageTitle>Type</PageTitle>
+
+<CommonDataGrid GridTitle="Type"
+				T="MType"
+				Data="@dataList"
+				Columns="@columns"
+				ActionButtons="@actionButtons"
+				CommandButtons="@commandButtons"
+				OnActionButtonClick="@OnActionButtonClicked"
+				OnCommandButtonClick="@OnCommandButtonClicked">
+</CommonDataGrid>

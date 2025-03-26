@@ -41,6 +41,8 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<ITaskHelper, TaskHelper>();
 builder.Services.AddScoped<IMasterRepository, MasterRepository>();
 builder.Services.AddScoped<IMasterHelper, MasterHelper>();
 builder.Services.AddScoped<IDialogServieHelper, DialogServiceHelper>();

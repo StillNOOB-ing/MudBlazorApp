@@ -1,0 +1,54 @@
+﻿@page "/DailyTaskEntry"
+@inherits DailyTaskEntryBase
+
+<PageTitle>Daily Task Entry</PageTitle>
+
+<MudDialog>
+    <DialogContent>
+        <EditForm Model="@model" OnValidSubmit="@OnValidSubmit">
+            <DataAnnotationsValidator />
+            <MudGrid>
+                <MudItem xs="12" md="12">
+                    <MudCard>
+                        <MudCardContent>
+
+                            <MudTextField Label="Report ID" @bind-Value="model.ReportByID" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
+                            <MudTextField Label="Reported On" @bind-Value="model.ReportedOn" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
+                            <MudTextField Label="Title" @bind-Value="model.Title" Variant="Variant.Outlined"></MudTextField>
+                            <MudTextField Label="Description" @bind-Value="model.Description" Variant="Variant.Outlined" Lines="5"></MudTextField>
+                            <MudTextField Label="Remark" @bind-Value="model.Remark" Variant="Variant.Outlined" Lines="5"></MudTextField>
+
+                            <MudSelect Label="PIC" T="MAccountInfo" @bind-Value="@selectedPIC" Variant="Variant.Outlined" SelectedValuesChanged="@OnSelectedPICChanged">
+                                @foreach (var item in picList)
+                                {
+                                    <MudSelectItem T="MAccountInfo" Value="@item">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudSelect Label="Status" T="MStatus" @bind-Value="@selectedStatus" Variant="Variant.Outlined" SelectedValuesChanged="@OnSelectedStatusChanged">
+                                @foreach (var item in statusList)
+                                {
+                                    <MudSelectItem T="MStatus" Value="@item">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudSelect Label="Type" T="MType" @bind-Value="@selectedType" Variant="Variant.Outlined" SelectedValuesChanged="@OnSelectedTypeChanged">
+                                @foreach (var item in typeList)
+                                {
+                                    <MudSelectItem T="MType" Value="@item">@item.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                            <MudTextField Label="Completed On" @bind-Value="model.CompletedOn" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
+
+                            <MudCardActions>
+                                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="@Color.Primary" StartIcon="@Icons.Material.Filled.DownloadDone">@mode.ToUpper()</MudButton>
+                                <div style="width:10px"></div>
+                                <MudButton Variant="Variant.Filled" Color="@Color.Error" StartIcon="@Icons.Material.Filled.Cancel" OnClick="@OnCancel">CANCEL</MudButton>
+                            </MudCardActions>
+                        </MudCardContent>
+                    </MudCard>                   
+                </MudItem>               
+
+            </MudGrid>
+            <ValidationSummary />
+        </EditForm>
+    </DialogContent>
+</MudDialog>

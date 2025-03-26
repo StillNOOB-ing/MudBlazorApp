@@ -197,5 +197,185 @@ namespace MudBlazorApp.Components.Database.Repository
         }
 
         #endregion
+
+        #region Status
+
+        public IQueryable<MStatus> GetStatusDB(Expression<Func<MStatus, bool>> predicate)
+        {
+            return context.Statuss.AsNoTracking().Where(predicate).AsQueryable();
+        }
+        public async Task<List<MStatus>> GetStatusAll(Expression<Func<MStatus, bool>> predicate)
+        {
+            return await context.Statuss.AsNoTracking().Where(predicate).ToListAsync();
+        }
+        public async Task<ResultInfo> InsertStatus(MStatus item)
+        {
+            ResultInfo result = new ResultInfo();
+            try
+            {
+                var findItem = new MStatus();
+                findItem = item.Clone();
+
+                await context.Statuss.AddAsync(findItem);
+                await context.SaveChangesAsync();
+
+                result.message = "Successful";
+                result.success = true;
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message;
+                result.success = false;
+            }
+            return result;
+        }
+        public async Task<ResultInfo> UpdateStatus(MStatus item)
+        {
+            ResultInfo result = new ResultInfo();
+            try
+            {
+                var findItem = await context.Statuss.FindAsync(item.UID);
+                if (findItem != null)
+                {
+                    context.Entry(findItem).CurrentValues.SetValues(item);
+
+                    await context.SaveChangesAsync();
+
+                    result.message = "Successful";
+                    result.success = true;
+                }
+                else
+                {
+                    result.message = "No Item Found";
+                    result.success = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message;
+                result.success = false;
+            }
+            return result;
+        }
+        public async Task<ResultInfo> DeleteStatus(MStatus item)
+        {
+            ResultInfo result = new ResultInfo();
+            try
+            {
+                var findItem = await context.Statuss.FindAsync(item.UID);
+                if (findItem != null)
+                {
+                    context.Statuss.Remove(findItem);
+
+                    await context.SaveChangesAsync();
+
+                    result.message = "Successful";
+                    result.success = true;
+                }
+                else
+                {
+                    result.message = "No Item Found";
+                    result.success = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message;
+                result.success = false;
+            }
+            return result;
+        }
+
+        #endregion
+
+        #region Type
+
+        public IQueryable<MType> GetTypeDB(Expression<Func<MType, bool>> predicate)
+        {
+            return context.Types.AsNoTracking().Where(predicate).AsQueryable();
+        }
+        public async Task<List<MType>> GetTypeAll(Expression<Func<MType, bool>> predicate)
+        {
+            return await context.Types.AsNoTracking().Where(predicate).ToListAsync();
+        }
+        public async Task<ResultInfo> InsertType(MType item)
+        {
+            ResultInfo result = new ResultInfo();
+            try
+            {
+                var findItem = new MType();
+                findItem = item.Clone();
+
+                await context.Types.AddAsync(findItem);
+                await context.SaveChangesAsync();
+
+                result.message = "Successful";
+                result.success = true;
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message;
+                result.success = false;
+            }
+            return result;
+        }
+        public async Task<ResultInfo> UpdateType(MType item)
+        {
+            ResultInfo result = new ResultInfo();
+            try
+            {
+                var findItem = await context.Types.FindAsync(item.UID);
+                if (findItem != null)
+                {
+                    context.Entry(findItem).CurrentValues.SetValues(item);
+
+                    await context.SaveChangesAsync();
+
+                    result.message = "Successful";
+                    result.success = true;
+                }
+                else
+                {
+                    result.message = "No Item Found";
+                    result.success = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message;
+                result.success = false;
+            }
+            return result;
+        }
+        public async Task<ResultInfo> DeleteType(MType item)
+        {
+            ResultInfo result = new ResultInfo();
+            try
+            {
+                var findItem = await context.Types.FindAsync(item.UID);
+                if (findItem != null)
+                {
+                    context.Types.Remove(findItem);
+
+                    await context.SaveChangesAsync();
+
+                    result.message = "Successful";
+                    result.success = true;
+                }
+                else
+                {
+                    result.message = "No Item Found";
+                    result.success = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.message = ex.Message;
+                result.success = false;
+            }
+            return result;
+        }
+
+        #endregion
     }
 }

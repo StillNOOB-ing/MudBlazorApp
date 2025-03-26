@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MudBlazorApp.Components.Database.Model
 {
-    [Table("UserLevelRight")]
-    public partial class MUserLevelRight : BaseDataColumn<MUserLevelRight>
+    [Table("Type")]
+    public partial class MType : BaseDataColumn<MType>
     {        
         [StringLength(50)] public string? Name { get; set; }
 

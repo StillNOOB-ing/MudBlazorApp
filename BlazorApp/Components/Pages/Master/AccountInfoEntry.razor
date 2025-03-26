@@ -34,7 +34,7 @@
 							<MudTextField Label="Email" @bind-Value="model.Email" Variant="Variant.Outlined" For="@(() => model.Email)"></MudTextField>
 						}						
 
-						@if (mode == "new" || mode == "password")
+						@if (mode == "add" || mode == "password")
 						{
 							<MudTextField Label="Password" @bind-Value="model.Password" Variant="Variant.Outlined" For="@(() => model.Password)"></MudTextField>
 							<MudTextField Label="Confirm Password" @bind-Value="model.ConfirmPassword" Variant="Variant.Outlined" For="@(() => model.ConfirmPassword)"></MudTextField>

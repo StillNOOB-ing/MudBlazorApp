@@ -23,5 +23,25 @@ namespace MudBlazorApp.Components.Database.Interface
         public Task<ResultInfo> DeleteUserLevelRight(MUserLevelRight item);
 
         #endregion
+
+        #region Status
+
+        public IQueryable<MStatus> GetStatusDB();
+        public Task<List<MStatus>> GetStatusAll();
+        public Task<ResultInfo> InsertStatus(MStatus item);
+        public Task<ResultInfo> UpdateStatus(MStatus item);
+        public Task<ResultInfo> DeleteStatus(MStatus item);
+
+        #endregion
+
+        #region Type
+
+        public IQueryable<MType> GetTypeDB();
+        public Task<List<MType>> GetTypeAll();
+        public Task<ResultInfo> InsertType(MType item);
+        public Task<ResultInfo> UpdateType(MType item);
+        public Task<ResultInfo> DeleteType(MType item);
+
+        #endregion
     }
 }
